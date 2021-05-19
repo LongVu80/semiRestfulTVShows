@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ editShow.title }}</title>
+    {% load static %}
+    <link rel='stylesheet' href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="/">Back to all the Shows</a>
+        </nav> 
+    </header>
+    <div class="main">
+        <div class="main">
+            <form action='/updateShow/{{ editShow.id }}' method='POST'>
+                <H1>Update the Show</H1>
+                <h3>The Show: {{ editShow.title }}</h3>
+                {% csrf_token %}
+                <section>
+                    <label for="title">Title</label>
+                    <input type="text" name="title" id="title">
+                </section>
+                <section>
+                    <label for="network">Network</label>
+                    <input type="text" name="network" id="network">
+                </section>
+                <section>
+                    <label for="release_date">Release Date</label>
+                    <input type="date" name="release_date" id="release_date">
+                </section>
+                <section>
+                    <label for="description">Description</label>                    
+                    <textarea name="description" id="description" value="{{editShow.description}}"></textarea>
+    
+                </section>
+                <button type="submit">Save Edits</button>
+            </form>
+        </div>
+    </div>
+    <p><a href="/displayShow/{{ editShow.id }}">Show</a></p>
+</body>
+</html>
