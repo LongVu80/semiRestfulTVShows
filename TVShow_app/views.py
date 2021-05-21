@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from .models import *
 
 #View all shows
@@ -12,7 +13,11 @@ def createShow(request):
     return render(request, "createShow.html")
 
 def addShow(request):
-    print(request.POST)
+    errors = Shows.objects.createValidate(request.POST)
+    if errors:
+        for err in errors.values():
+            messages.error(request, err)
+        return redirect('/createShow/')
     Shows.objects.create(
         title=request.POST['title'],
         network=request.POST['network'],
@@ -28,6 +33,11 @@ def editShow(request, show_id):
     return render(request, 'editShow.html', context)
 
 def updateShow(request, show_id):
+    errors = Shows.objects.editValidate(request.POST)
+    if errors:
+        for err in errors.values():
+            messages.error(request, err)
+        return redirect(f"/editShow/{show_id}")
     toUpdate = Shows.objects.get(id=show_id)
     toUpdate.title = request.POST['title']
     toUpdate.network = request.POST['network']

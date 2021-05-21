@@ -13,12 +13,22 @@
         <nav class="navbar">
             <a href="/">Back to all the Shows</a>
         </nav> 
+        {% if messages %}
+        <section class='messages'>
+            {% for message in messages %}
+            <h3 {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</h3>
+            {% endfor %}
+        </section>
+        {% endif %} 
     </header>
     <div class="main">
-        <div class="main">
+        
             <form action='/updateShow/{{ editShow.id }}' method='POST'>
                 <H1>Update the Show</H1>
-                <h3>The Show: {{ editShow.title }}</h3>
+                <p>The Show: <b>{{ editShow.title }}</b><br>
+                Network: {{ editShow.network }} <br>
+                release_date: {{ editShow.release_date }}
+                </p>
                 {% csrf_token %}
                 <section>
                     <label for="title">Title</label>
@@ -39,8 +49,8 @@
                 </section>
                 <button type="submit">Save Edits</button>
             </form>
-        </div>
+         <p><a href="/displayShow/{{ editShow.id }}">Show</a></p>
     </div>
-    <p><a href="/displayShow/{{ editShow.id }}">Show</a></p>
+   
 </body>
 </html>
