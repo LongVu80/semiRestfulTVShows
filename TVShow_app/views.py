@@ -18,12 +18,16 @@ def addShow(request):
         for err in errors.values():
             messages.error(request, err)
         return redirect('/createShow/')
-    Shows.objects.create(
-        title=request.POST['title'],
-        network=request.POST['network'],
-        release_date=request.POST['release_date']
-    )
-    return redirect('/')
+    else:
+        if request.method == 'POST':
+            newShow=Shows.objects.create(
+                title=request.POST['title'],
+                network=request.POST['network'],
+                release_date=request.POST['release_date'],
+                description=request.POST['description']
+            )
+            return redirect(f'/displayShow/{newShow.id}')
+        return redirect('/createShow/')
 
 def editShow(request, show_id):
     edit = Shows.objects.get(id=show_id)
@@ -33,7 +37,7 @@ def editShow(request, show_id):
     return render(request, 'editShow.html', context)
 
 def updateShow(request, show_id):
-    errors = Shows.objects.editValidate(request.POST)
+    errors = Shows.objects.createValidate(request.POST)
     if errors:
         for err in errors.values():
             messages.error(request, err)

@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import date, datetime
 
 class ShowManager(models.Manager):
     def createValidate(self, form):
@@ -7,34 +8,23 @@ class ShowManager(models.Manager):
             errors['title'] = "Title of the show must be at lease 2 characters!!"
         titleCheck = self.filter(title=form['title'])
         if titleCheck:
-            errors['title'] = 'That Show title is already in the system, please choose a new title.'
+            errors['title'] = 'Show title must be unique.'
 
         if len(form['network']) < 3:
             errors['network'] = "Network has to be 3 characters!!"
 
         if len(form['description']) < 10:
             errors['description'] = "Description of the show must be greater than 10 characters!!"
-
-        if len(form['release_date']) < 7:
-            errors['release_date'] = "Enter the correct Released Date of the show!!"
-
+            
+        if form['release_date']:
+            date_entered = form['release_date']
+            reldate = datetime.strptime(date_entered, "%Y-%m-%d")
+            today = datetime.now()
+            if reldate >= today:
+                errors['release_date'] = "The release date must be in the past."
+            
             return errors
 
-    def editValidate(self, form):
-        errors = {}
-        if len(form['title']) < 2:
-            errors['title'] = "Title of the show must be at lease 2 characters!!"
-
-        if len(form['network']) < 3:
-            errors['network'] = "Network has to be 3 characters!!"
-
-        if len(form['description']) < 10:
-            errors['description'] = "Description of the show must be greater than 10 characters!!"
-
-        if len(form['release_date']) < 7:
-            errors['release_date'] = "Enter the correct Released Date of the show!!"
-
-            return errors
 
 class Shows(models.Model):
     title = models.CharField(max_length=255)
