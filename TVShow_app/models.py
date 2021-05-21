@@ -13,9 +13,9 @@ class ShowManager(models.Manager):
         if len(form['network']) < 3:
             errors['network'] = "Network has to be 3 characters!!"
 
-        if len(form['description']) < 10:
+        if form['description'] != '' and len(form['description']) < 10:
             errors['description'] = "Description of the show must be greater than 10 characters!!"
-            
+
         if form['release_date']:
             date_entered = form['release_date']
             reldate = datetime.strptime(date_entered, "%Y-%m-%d")
